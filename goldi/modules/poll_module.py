@@ -82,7 +82,7 @@ class Poll():
         pickfrom = fetch_data('poll_data.txt', 'options')
         opt = -1
         for i in len(pickfrom):
-            if pickfrom[i].strip() == the_vote,strip():
+            if pickfrom[i].strip() == the_vote.strip():
                 opt = i
                 break
         if opt == -1:
