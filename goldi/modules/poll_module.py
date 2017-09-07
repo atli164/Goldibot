@@ -18,6 +18,12 @@ class Poll():
         if len(cmdcontent) < 2:
             await self.bot.say('Your poll has to have a question and at least one option to choose from!')
             return
+        if len(cmdcontent) > 100:
+            await self.bot.say('I can\'t handle that many options!')
+            return
+        if max(map(len, cmdcontent)) > 200:
+            await self.bot.say('Those options are too big for me!')
+            return
         write_data('poll_data.txt', 'on', True)
         question = cmdcontent[0].strip()
         write_data('poll_data.txt', 'question', question)
