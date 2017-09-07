@@ -106,7 +106,7 @@ class Poll():
         votes_so_far = fetch_data('poll_data.txt', 'votes')
         message = question + '\n'
         for i in range(len(opts)):
-            message += 'Option ' + str(i + 1) + ', ' + opts[i] + ', currently has ' + votes[i] + 'votes.\n'
+            message += 'Option ' + str(i + 1) + ', ' + opts[i] + ', currently has ' + votes_so_far[i] + 'votes.\n'
         await self.bot.say(message) 
 
 def setup(bot, config):
