@@ -13,6 +13,9 @@ modules = {
 	},
 	'latex_module': {
 		'enabled': True
+	},
+	'poll_module': {
+		'enabled': True
 	}
 }
 
