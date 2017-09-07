@@ -28,7 +28,7 @@ class Poll():
         msg = 'Poll successfully started!\n'
         msg += question + '\n'
         msg += 'Your options are: \n'
-        for i in range(cmdcontent):
+        for i in range(len(cmdcontent)):
             msg += str(i + 1) + ': ' + cmdcontent[i] + '\n'
         await self.bot.say(msg)
 
