@@ -1,12 +1,12 @@
 from discord.ext import commands
 from fetch_file import fetch_data, write_new_data, write_data
 
+def ongoing_poll():
+    return fetch_data('poll_data.txt', 'on')
+
 class Poll():
     def __init__(self, bot):
         self.bot = bot
-
-    def ongoing_poll():
-        return fetch_data('poll_data.txt', 'on')
 
     @commands.command(pass_context=True)
     async def startpoll(self, ctx):
