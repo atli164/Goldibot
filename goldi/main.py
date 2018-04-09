@@ -8,8 +8,6 @@ import sys
 import config
 import secrets
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 bot = commands.Bot(command_prefix = commands.when_mentioned_or(*config.prefixes), 
 		   description = config.description) 
 
@@ -31,30 +29,29 @@ def load_ext(bot, name, settings):
 	if name in bot.extensions:
 		return
 
-	lib = importlib.import_module('goldi.' + name)
+	lib = importlib.import_module(name)
 	if not hasattr(lib, 'setup'):
 		raise discord.ClientException('Extension does not have a setup function.')
 
 	lib.setup(bot, settings)
 	bot.extensions[name] = lib
 
-sys.path.append('packages')
+sys.path.append(os.path.join(os.getcwd(),'packages/'))
 
 for mod, settings in config.packages.items():
-	if settings['enabled']:
-		try:
-			importlib.import_module(mod)
-		except ImportError as err:
-			print('Couldn\'t load {} because of {}'.format(mod, str(err)))
+    if settings['enabled']:
+        try:
+            importlib.import_module(mod)
+        except ImportError as err:
+            print('Couldn\'t load {} because of {}'.format(mod, str(err)))
 
-os.chdir('..')
-sys.path.append('modules')
+sys.path.append(os.path.join(os.getcwd(),'modules/'))
 
 for mod, settings in config.modules.items():
-	if settings['enabled']:
-		try:
-			load_ext(bot, 'modules.' + mod, settings)
-		except (ImportError, AttributeError) as err:
-			print('Coudln\'t load {} because of {}'.format(mod, str(err)))
+    if settings['enabled']:
+        try:
+            load_ext(bot, mod, settings)
+        except (ImportError, AttributeError) as err:
+            print('Couldn\'t load {} because of {}'.format(mod, str(err)))
 
 bot.run(secrets.secret_token)
