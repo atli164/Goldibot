@@ -1,7 +1,7 @@
 import datetime
 from discord.ext import commands
 
-class Calendar():
+class Calendar(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 	
@@ -23,7 +23,7 @@ class Calendar():
 		else:
 			to_say += 'th'
 		to_say += ' of ' + months[now.month] + ', ' + str(now.year) + '.'
-		await self.bot.say(to_say)
+		await ctx.send(to_say)
 
 def setup(bot, config):
 	bot.add_cog(Calendar(bot))

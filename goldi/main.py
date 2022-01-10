@@ -16,7 +16,7 @@ async def on_ready():
 	print('Login successful')
 	print('User: ' + str(bot.user.name))
 	print('ID: ' + str(bot.user.id))
-	await bot.change_presence(game=discord.Game(name='by herself'))
+	await bot.change_presence(activity=discord.Game(name='by herself'))
 
 @bot.command(pass_context=True)
 async def kill(ctx):
@@ -26,15 +26,12 @@ async def kill(ctx):
 		sys.exit()
 
 def load_ext(bot, name, settings):
-	if name in bot.extensions:
-		return
+    lib = importlib.import_module(name)
+    if not hasattr(lib, 'setup'):
+        print(lib)
+        raise discord.ClientException('Extension does not have a setup function.')
 
-	lib = importlib.import_module(name)
-	if not hasattr(lib, 'setup'):
-		raise discord.ClientException('Extension does not have a setup function.')
-
-	lib.setup(bot, settings)
-	bot.extensions[name] = lib
+    lib.setup(bot, settings)
 
 sys.path.append(os.path.join(os.getcwd(),'packages/'))
 

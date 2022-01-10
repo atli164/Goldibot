@@ -1,0 +1,33 @@
+%import common.SIGNED_INT
+%import common.WORD
+%import common.WS
+%ignore WS
+
+EXPLODING : "!"
+
+start: roll_expr [ WORD ] [";" start]
+
+roll_expr : roll_expr "+" roll_expr -> add_rolls
+          | roll_expr "-" roll_expr -> sub_rolls
+          | roll_expr "*" roll_expr -> mul_rolls
+          | "{" roll_expr "}" "kh" "{" roll_expr "}" -> keep_highest
+          | "{" roll_expr "}" "kl" "{" roll_expr "}" -> keep_lowest
+          | "{" roll_expr "}" "c" "{" predicate "}" -> count_predicate
+          | "{" roll_expr "}" "r" ["{" roll_expr "}"] "{" predicate "}" -> reroll_predicate
+          | "if" "{" predicate "}" "{" roll_expr "}" "{" roll_expr "}" "{" roll_expr "}" -> branch_predicate
+          | dice_expr -> only_dice
+          
+dice_expr : "(" roll_expr ")" -> paren_dice
+          | [dice_expr] ("d" | "D") dice_expr [ EXPLODING ] -> dice
+          | SIGNED_INT -> constant
+
+predicate : "(" predicate ")" -> paren_predicate
+          | "=" roll_expr -> eq_predicate
+          | "<" roll_expr -> lt_predicate
+          | ">" roll_expr -> gt_predicate
+          | "<=" roll_expr -> le_predicate
+          | ">=" roll_expr -> ge_predicate
+          | "!=" roll_expr -> ne_predicate
+          | predicate "||" predicate -> or_predicate
+          | predicate "&&" predicate -> and_predicate
+          | "!" predicate -> not_predicate

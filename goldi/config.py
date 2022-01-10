@@ -1,29 +1,35 @@
 modules = {
-	'basic_module': {
+	'goldiBasics': {
 		'enabled': True
 	},
-	'points_module': {
+	'goldiPoints': {
 		'enabled': True
 	},
-	'calendar_module': {
+	'goldiCalendar': {
 		'enabled': True
 	},
-	'rng_module': {
+	'goldiRng': {
 		'enabled': True
 	},
-	'latex_module': {
+	'goldiLatex': {
+		'enabled': False
+	},
+	'goldiPolls': {
 		'enabled': True
 	},
-	'poll_module': {
+	'goldiInitiative': {
 		'enabled': True
 	}
 }
 
 packages = {
-	'fetch_file': {
+	'goldiIO': {
 		'enabled': True
 	},
-	'util': {
+	'goldiUtil': {
+		'enabled': True
+	},
+	'goldiRolls': {
 		'enabled': True
 	}
 }
