@@ -42,12 +42,29 @@ def write_data(filename, attr, val):
     except Exception:
         return False
 
-def clear_data(filename):
+def clear_data(filename, attr = None):
     dataDir = os.path.join(os.getcwd(), 'data/')
     fileDir = os.path.join(dataDir, filename + '.json')
-    try:
-        with open(fileDir, 'w') as jsonData:
-            json.dump({}, jsonData)
-        return True
-    except Exception:
-        return False
+    if attr is None: # Clear all
+        try:
+            with open(fileDir, 'w') as jsonData:
+                json.dump({}, jsonData)
+            return True
+        except Exception:
+            return False
+    else:
+        try:
+            with open(fileDir, 'r') as jsonData:
+                tmp = json.load(jsonData)
+        except Exception:
+            return False
+        try:
+            del tmp[attr]
+        except Exception:
+            pass
+        try:
+            with open(fileDir, 'w') as jsonData:
+                json.dump(tmp, jsonData)
+            return True
+        except Exception:
+            return False

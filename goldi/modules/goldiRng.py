@@ -24,9 +24,19 @@ class RNG(commands.Cog):
 
     @commands.command(pass_context=True)
     async def roll(self, ctx):
-        """Rolls dice.\nTakes input in the format ?roll [dicestr]."""
+        """Rolls dice.\nTakes input in the format ?roll [dicestr].\n Returns total result."""
         try:
-            ans = rollstrtostring(ctx.message.content.split(None, 1)[1])
+            ans = rollstrtostring(ctx.message.content.split(None, 1)[1], False)
+        except Exception:
+            await ctx.send('That\'s not valid formatting silly!')
+            return
+        await ctx.send(ans)
+
+    @commands.command(pass_context=True)
+    async def rolls(self, ctx):
+        """Rolls dice.\nTakes input in the format ?rolls [dicestr].\n Returns individual dice."""
+        try:
+            ans = rollstrtostring(ctx.message.content.split(None, 1)[1], True)
         except Exception:
             await ctx.send('That\'s not valid formatting silly!')
             return

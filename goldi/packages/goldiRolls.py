@@ -30,6 +30,8 @@ class DiceExpr(Evaluatable, ListEvaluatable):
         a = self.a.eval()
         b = self.b.eval()
         assert (not self.exploding) or (a != b)
+        if b < a:
+            a, b = -1, 1
         for i in range(self.n.eval()):
             sm = 0
             roll = random.randint(a, b)
@@ -151,7 +153,7 @@ class BranchExpr(Evaluatable, ListEvaluatable):
 
 class TreeToRoll(Transformer):
     def start(self):
-        rolls = [(self[0].eval(), self[1])]
+        rolls = [(self[0].list_eval(), self[1])]
         if self[2] is not None:
             rolls += self[2]
         return rolls
@@ -236,11 +238,14 @@ def parselalr(s):
     tree = lark.parse(s)
     return tree
 
-def rollstrtostring(s):
+def rollstrtostring(s, lst=False):
     prnt = ""
     res = parselalr(s)
-    for (i, (num, label)) in enumerate(res):
-        prnt += "Rolled " + str(num)
+    for (i, (nums, label)) in enumerate(res):
+        if lst:
+            prnt += "Rolled " + ",".join([str(num) for num in nums])
+        else:
+            prnt += "Rolled " + str(sum(nums))
         if label is not None:
             prnt += " " + label
         prnt += "."

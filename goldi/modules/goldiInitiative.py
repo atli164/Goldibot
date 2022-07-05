@@ -115,6 +115,15 @@ class Initiative(commands.Cog):
         await ctx.send('Initiative registered!')
     
     @commands.command(pass_context=True)
+    async def clearinitiative(self, ctx):
+        """Sets initiative for a name. Called as ?setinitiative [name]."""
+        _, name = ctx.message.content.split()
+        if not clear_data('initiative_table', name):
+            await ctx.send('Initiative removal failed.')
+            return
+        await ctx.send('Initiative removed!')
+    
+    @commands.command(pass_context=True)
     async def printinitiative(self, ctx):
         """Prints initiative table. Takes no input."""
         table = fetch_all_data('initiative_table')
@@ -137,6 +146,15 @@ class Initiative(commands.Cog):
                 mess += k + ": " + str(v) + "\n"
         await ctx.send(mess)
     
+    def nametoid(self, name):
+        table = fetch_all_data('initiative_names')
+        if table is None:
+            return None
+        for (pid, pname) in table.items():
+            if name == pname:
+                return pid
+        return None
+
     @commands.command(pass_context=True)
     async def nextplayer(self, ctx):
         """Moves onto next player in intiative order. Takes no input."""
@@ -157,7 +175,11 @@ class Initiative(commands.Cog):
         if not write_data('initiative_table', 'cur', cur):
             await ctx.send("File IO failed!")
             return
-        await ctx.send("It is " + cur + "'s turn!")
+        pid = self.nametoid(cur)
+        if pid is not None:
+            await ctx.send("It is " + cur + "'s turn! <@" + str(pid) + ">")
+        else:
+            await ctx.send("It is " + cur + "'s turn!")
         return
 
 def setup(bot, config):
